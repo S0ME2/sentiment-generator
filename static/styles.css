@@ -1,4 +1,3 @@
-/* static/styles.css */
 :root {
   color-scheme: dark;
   --bg: #0e1116;
@@ -66,16 +65,14 @@ button {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Critical: keep generated text inside the card on all screens */
 pre.output {
   margin: 0;
-  white-space: pre-wrap;      /* wrap while preserving paragraphs */
-  overflow-wrap: anywhere;    /* break really long tokens if needed */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   word-break: break-word;
   line-height: 1.6;
 }
 
-/* Mobile */
 @media (max-width: 640px) {
   .row { grid-template-columns: 1fr; }
 }

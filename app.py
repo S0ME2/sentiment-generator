@@ -1,8 +1,6 @@
-# app.py (fixed)
 import os
 from flask import Flask, render_template, request
-
-from pipelines import sentiment, generation  # ← import modules
+from pipelines import sentiment, generation
 from pipelines.sentiment import SENTIMENT_MODEL_ID
 from pipelines.generation import GEN_MODEL_ID
 
@@ -26,25 +24,22 @@ def generate():
         target_words = int(request.form.get("length_words") or 120)
     except ValueError:
         target_words = 120
-
     detected = None
     if manual_choice == "auto":
-        det = sentiment.detect_sentiment(user_prompt)  # ← patched target
+        det = sentiment.detect_sentiment(user_prompt)
         chosen_sent = det["label"]
         det_score = det["score"]
         detected = det
     else:
         chosen_sent = manual_choice
         det_score = None
-
-    gen = generation.generate_aligned(  # ← patched target
+    gen = generation.generate_aligned(
         prompt=user_prompt,
         sentiment=chosen_sent,
         target_words=target_words,
         max_output_tokens=MAX_OUTPUT_TOKENS,
         language=LANGUAGE,
     )
-
     return render_template(
         "result.html",
         language=LANGUAGE,
@@ -57,7 +52,6 @@ def generate():
         gen_model=GEN_MODEL_ID,
         deploy_target=DEPLOY_TARGET,
         max_tokens=MAX_OUTPUT_TOKENS,
-        # extras for compatibility
         sentiment=chosen_sent,
         detected=detected,
         length_words=target_words,

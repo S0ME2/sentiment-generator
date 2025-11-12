@@ -1,17 +1,15 @@
-# tests/test_api.py
 import os
 import sys
 from pathlib import Path
 from unittest.mock import patch
 
-# Ensure project root is on sys.path so 'import app' always works
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 os.environ.setdefault("FLASK_ENV", "testing")
 
-import app  # noqa: E402  (import after sys.path insert)
+import app
 
 
 def test_index():
@@ -23,8 +21,6 @@ def test_index():
 
 def test_generate_auto_mocked():
     client = app.app.test_client()
-
-    # Mock pipelines: sentiment detection + generation
     with (
         patch("pipelines.sentiment.detect_sentiment") as mock_detect,
         patch("pipelines.generation.generate_aligned") as mock_gen,
@@ -34,7 +30,6 @@ def test_generate_auto_mocked():
             "prompt": "Write an uplifting... (mocked)",
             "text": "This is a mocked positive paragraph.",
         }
-
         r = client.post(
             "/generate",
             data={
@@ -43,7 +38,6 @@ def test_generate_auto_mocked():
                 "length_words": "80",
             },
         )
-
         assert r.status_code == 200
         body = r.data.decode("utf-8")
         assert "Generated Output" in body
@@ -53,13 +47,11 @@ def test_generate_auto_mocked():
 
 def test_generate_manual_negative_mocked():
     client = app.app.test_client()
-
     with patch("pipelines.generation.generate_aligned") as mock_gen:
         mock_gen.return_value = {
             "prompt": "Write a critical... (mocked)",
             "text": "This is a mocked negative paragraph.",
         }
-
         r = client.post(
             "/generate",
             data={
@@ -68,7 +60,6 @@ def test_generate_manual_negative_mocked():
                 "length_words": "120",
             },
         )
-
         assert r.status_code == 200
         body = r.data.decode("utf-8")
         assert "negative" in body

@@ -1,19 +1,14 @@
-# pipelines/generation.py
 from functools import lru_cache
 from typing import Optional
 import math, os, re, sys
 
-# PUBLIC (used by app/tests)
 GEN_MODEL_ID = os.getenv("GEN_MODEL", "google/flan-t5-small")
 _FALLBACK_CAUSAL = "distilgpt2"
 
-# ---- NEW: rich tones/styles ----
 STYLE_PREFIX = {
-    # original three
     "positive": "Write an uplifting, optimistic, and encouraging paragraph",
     "negative": "Write a critical, somber, and cautious paragraph",
     "neutral": "Write a balanced and objective paragraph",
-    # extras
     "enthusiastic": "Write an enthusiastic, upbeat, and energetic paragraph",
     "inspirational": "Write an inspiring, hopeful, and forward-looking paragraph",
     "motivational": "Write a motivational, encouraging, and action-oriented paragraph",
@@ -35,7 +30,6 @@ STYLE_PREFIX = {
 }
 
 ALIASES = {
-    # handy synonyms
     "optimistic": "positive",
     "supportive": "empathetic",
     "uplifting": "inspirational",
@@ -61,7 +55,6 @@ def _style_for(label: str) -> str:
     s = STYLE_PREFIX.get(k)
     if s:
         return s
-    # If you type any custom style, we still produce something sensible.
     return f"Write a {k} paragraph"
 
 
@@ -95,7 +88,7 @@ def _make_pipe():
         message=r"builtin type swigvarlink.* has no __module__ attribute",
         category=DeprecationWarning,
     )
-    from transformers import pipeline  # lazy import on first real use
+    from transformers import pipeline
 
     global GEN_MODEL_ID
     last_err = None
@@ -105,7 +98,7 @@ def _make_pipe():
             tok = p.tokenizer
             if getattr(tok, "pad_token_id", None) is None:
                 tok.pad_token = tok.eos_token
-            GEN_MODEL_ID = mid  # reflect what actually loaded
+            GEN_MODEL_ID = mid
             return p
         except Exception as e:
             last_err = e
@@ -165,22 +158,18 @@ def generate_aligned(
     sentiment = (sentiment or "neutral").lower()
     style = _style_for(sentiment)
     topic = (prompt or "(no prompt provided)").strip()
-
     system_prompt = (
         f"{style} in {language} (about {target_words} words) about: {topic}. "
         f"Keep it coherent and natural; no bullet points or lists."
     )
-
     pipe = _make_pipe()
     tok = pipe.tokenizer
-
     max_new = _words_to_tokens(target_words)
     if max_output_tokens:
         try:
             max_new = min(max_new, int(max_output_tokens))
         except Exception:
             pass
-
     task = _task_for(GEN_MODEL_ID)
     if task == "text2text-generation":
         result = pipe(
@@ -209,5 +198,4 @@ def generate_aligned(
             num_return_sequences=1,
         )[0]["generated_text"]
         text = result
-
     return {"prompt": system_prompt, "text": _clean(text, target_words)}
