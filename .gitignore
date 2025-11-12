@@ -1,0 +1,73 @@
+# ---- Python bytecode ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- C extensions ----
+*.so
+
+# ---- Packaging / build artifacts ----
+.Python
+build/
+dist/
+downloads/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# ---- Unit test / coverage ----
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.pytest_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+hypothesis/
+
+# ---- Flask instance & local sqlite ----
+instance/
+*.sqlite
+*.sqlite3
+
+# ---- Logs ----
+logs/
+*.log
+
+# ---- Editors / IDE ----
+.vscode/
+.idea/
+*.code-workspace
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+
+# ---- Environment variables ----
+.env
+.env.*
+*.env
+
+# ---- Model / data caches (local project only) ----
+cache/
+models/
+checkpoints/
+artifacts/
+
+# ---- Optional frontend bits (if added later) ----
+node_modules/

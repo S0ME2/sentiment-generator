@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generated Result</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Generated Output</h1>
+
+    <section class="meta card">
+      <div><strong>Language:</strong> {{ language }}</div>
+      <div><strong>Sentiment:</strong> {{ detected_sentiment }}{% if detection_score is not none %} (score {{ '%.2f' % detection_score }}){% endif %}</div>
+      <div><strong>Target length:</strong> {{ target_words }} words</div>
+      <div class="muted small">Models: sentiment={{ sentiment_model }}, generation={{ gen_model }}; Max tokens={{ max_tokens }}</div>
+    </section>
+
+    <section class="card">
+      <h2>Your Prompt</h2>
+      <pre class="output">{{ user_prompt }}</pre>
+    </section>
+
+    <section class="card">
+      <h2>Output</h2>
+      <pre class="output">{{ generated_text }}</pre>
+    </section>
+
+    <p><a href="/">← Back</a></p>
+  </main>
+</body>
+</html>

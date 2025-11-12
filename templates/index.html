@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sentiment-Aligned Generator</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Sentiment-Aligned Generator</h1>
+    <p class="muted">Language: English</p>
+
+    <form method="POST" action="/generate" class="card">
+      <label for="prompt">Your prompt</label>
+      <textarea id="prompt" name="prompt" rows="8" required placeholder="Write your topic or opening lines here..."></textarea>
+
+      <div class="row">
+        <div>
+          <label for="sentiment">Sentiment</label>
+          <select id="sentiment" name="sentiment">
+            <option value="auto" selected>Auto-detect</option>
+            <option value="positive">Positive</option>
+            <option value="neutral">Neutral</option>
+            <option value="negative">Negative</option>
+          </select>
+        </div>
+        <div>
+          <label for="length_words">Length (words)</label>
+          <input id="length_words" name="length_words" type="number" min="20" max="1500" value="120" />
+        </div>
+      </div>
+
+      <button type="submit">Generate</button>
+    </form>
+  </main>
+</body>
+</html>
